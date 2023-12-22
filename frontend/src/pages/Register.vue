@@ -35,7 +35,7 @@
       </form>
 
       <p class="mt-10 text-center text-sm text-gray-500">
-        <a href="#" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Войти</a>
+        <router-link :to="{name: 'Login'}" href="#" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Войти</router-link>
       </p>
     </div>
   </div>

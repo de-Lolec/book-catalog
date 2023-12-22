@@ -31,7 +31,7 @@
       </form>
 
       <p class="mt-10 text-center text-sm text-gray-500">
-        <a href="#" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Зарегистрироваться</a>
+        <router-link :to="{name: 'Register'}" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Зарегистрироваться</router-link>
       </p>
     </div>
   </div>
