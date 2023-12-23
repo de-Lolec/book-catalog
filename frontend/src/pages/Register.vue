@@ -7,6 +7,13 @@
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-6" action="#" method="POST">
         <div>
+          <label for="fullname" class="block text-sm font-medium leading-6 text-gray-900">ФИО</label>
+          <div class="mt-2">
+            <input id="fullname" name="fullname" type="text" required="" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+          </div>
+        </div>
+        <!-- <select-country/> -->
+        <div>
           <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
           <div class="mt-2">
             <input id="email" name="email" type="email" autocomplete="email" required="" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
@@ -35,16 +42,21 @@
       </form>
 
       <p class="mt-10 text-center text-sm text-gray-500">
-        <a href="#" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Войти</a>
+        <router-link :to="{name: 'Login'}" href="#" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Войти</router-link>
       </p>
     </div>
   </div>
 </template>
 
 <script>
+import SelectCountry from '../components/SelectCountry.vue';
+
   export default {
     
+    components: { SelectCountry }
   }
+
+  
 </script>
 
 <style scoped>
