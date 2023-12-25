@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
-    public function register(RegisterRequest $request): void
+    public function register(RegisterRequest $request)
     {
         $user = User::create([
             'name' => $request['name'],
@@ -21,6 +22,6 @@ class AuthController extends Controller
         return response([
             'user' => $user,
             'token' => $token,
-        ])
+        ]);
     }
 }

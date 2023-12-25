@@ -4,12 +4,9 @@ import axiosClient from "../axios";
 const store = createStore({
   state: {
     user: {
-      data: {
-        name: "Der",
-        email: "fef",
+        data: {},
+        token: sessionStorage.getItem("TOKEN"),
       },
-      token: null
-    }
   },
   getters: {},
   actions: {

@@ -5,6 +5,6 @@ import router from './router/router'
 import App from './App.vue'
 
 createApp(App)
-  .use(router)
   .use(store)
+  .use(router)
   .mount('#app')
