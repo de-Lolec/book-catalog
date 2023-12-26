@@ -131,7 +131,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 import {
   Dialog,
   DialogPanel,
@@ -144,10 +144,13 @@ import {
   MenuItems,
   TransitionChild,
   TransitionRoot,
-} from '@headlessui/vue'
-import { XMarkIcon } from '@heroicons/vue/24/outline'
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
-import ProductList from './ProductList.vue'
+} from '@headlessui/vue';
+import { XMarkIcon } from '@heroicons/vue/24/outline';
+import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/vue/20/solid';
+import ProductList from './ProductList.vue';
+import axiosClient from '../axios';
+
+
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -188,6 +191,8 @@ const filters = [
     ],
   },
 ]
+
+
 
 const mobileFiltersOpen = ref(false)
 </script>
