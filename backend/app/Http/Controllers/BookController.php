@@ -12,15 +12,13 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-        $books = Book::paginate(15);
+        // $books = Book::paginate(15);
 
-        // $category_id = $request->get('category_id');
+        $categoryId = $request->get('category_id');
 
-        // if (empty($category_id)) {
-        //     $posts = Book::all();
-        // } else {
-        //     $posts = Book::where('category_id', '=', $category_id)->get();
-        // }
+        $books = Book::whereHas('categories', function ($query) use ($categoryId) {
+            $query->where('categories.id', $categoryId);
+        })->paginate(10);
     
 
         return $books;

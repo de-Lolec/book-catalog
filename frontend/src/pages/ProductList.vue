@@ -28,15 +28,26 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
+import { useRoute } from 'vue-router';
+import { watchEffect } from 'vue';
 import axiosClient from '../axios';
 
+const route = useRoute();
 const books = ref([]);
 
 const getResults = async (page = 1) => {
-    const response = await axiosClient.get(`/books?page=${page}`);
+    const response = await axiosClient.get('/books', {
+                    params: {
+                        page: page,
+                        category_id: route.params.category_id,
+                    },
+                  });
     books.value = response.data;
     console.log(books);
-  }
+  };
 
-getResults();
+watchEffect(() => {
+  getResults();
+});
+
 </script>

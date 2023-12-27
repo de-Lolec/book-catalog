@@ -98,7 +98,7 @@
               <h3 class="sr-only">Categories</h3>
               <ul role="list" class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
                 <li v-for="category in categories" :key="category.title">
-                  <span @click="navigateToCategory" class="cursor-pointer">{{ category.title }}</span>
+                  <router-link :to="`/catalog/category/${category.id}`">{{ category.title }}</router-link>
                 </li>
               </ul>
 
@@ -161,17 +161,17 @@ import { useRoute } from 'vue-router';
 import { TailwindPagination } from 'laravel-vue-pagination';
 import ProductList from './ProductList.vue';
 import axiosClient from '../axios';
+import { watchEffect } from 'vue';
 
 const route = useRoute();
 
 console.log(route.params);
 
-// console.log( router.currentRoute.params);
+watchEffect(() => {
+  console.log(route.params);
+});
 
 const categories = ref([]);
-function navigateToCategory() {
-  this.$router.push(`/category/${this.category.id}`);
-}
 
 const getResults = async (page = 1) => {
   const response = await axiosClient.get("/categories");
