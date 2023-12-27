@@ -182,7 +182,7 @@ getCategories();
 
 const findTitleById = (id) => {
   const category = categories.value.find(category => category.id == id);
-  return category ? category.title : 'Категория не найдена';
+  return category ? category.title : 'Каталог';
 };
 
 const sortOptions = [
