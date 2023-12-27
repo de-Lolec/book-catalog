@@ -70,6 +70,8 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Category::destroy($id);
+
+        return response()->json(['message' => 'Категория успешно удалена'], 200);
     }
 }

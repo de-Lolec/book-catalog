@@ -104,7 +104,22 @@
                   @categoryAdded="getCategories" 
                 />
                 <li v-for="category in categories" :key="category.title">
-                  <router-link :to="`/catalog/category/${category.id}`">{{ category.title }}</router-link>
+                  <PencilIcon 
+                    v-if="user.is_admin" 
+                    class="h4 w-4 inline cursor-pointer mr-2"
+                  />
+                  <TrashIcon 
+                    v-if="user.is_admin" 
+                    class="h4 w-4 inline cursor-pointer mr-2"
+                    @click="deleteCategory(category.id)"
+                  />
+                  <router-link 
+                    :to="`/catalog/category/${category.id}`">
+                    {{ category.title }}
+                  
+                  </router-link>
+                  <!-- <span>x</span> -->
+                
                 </li>
               </ul>
 
@@ -163,7 +178,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue';
-import { XMarkIcon } from '@heroicons/vue/24/outline';
+import { XMarkIcon, TrashIcon, PencilIcon } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/vue/20/solid';
 import { useRoute } from 'vue-router';
 import { useStore } from "vuex";
@@ -201,6 +216,19 @@ store.dispatch("getUser");
 const user = computed(() => store.state.user.data);
 
 console.log(user);
+
+const deleteCategory = async (id) => {
+  axiosClient.post(`/category/${id}/delete`, {
+      id: id,
+    })
+    .then(response => {
+      console.log(response);
+      console.log(id);
+      getCategories()
+    }, error => {
+      console.error('Error adding category:', error.message);
+    });
+};
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
