@@ -127,8 +127,14 @@
             <div class="lg:col-span-3">
               <product-list />
             </div>
+            <TailwindPagination
+                :data="categories"
+                @pagination-change-page="getResults"
+            />
           </div>
+
         </section>
+
       </main>
     </div>
   </div>
@@ -151,16 +157,29 @@ import {
 } from '@headlessui/vue';
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/vue/20/solid';
+import { useRoute } from 'vue-router';
+import { TailwindPagination } from 'laravel-vue-pagination';
 import ProductList from './ProductList.vue';
 import axiosClient from '../axios';
 
-const categories = ref([]);
+const route = useRoute();
 
-onMounted(async () => {
-    const response = await axiosClient.get("/categories");
-    categories.value = response.data;
-    console.log(categories);
-});
+console.log(route.params);
+
+// console.log( router.currentRoute.params);
+
+const categories = ref([]);
+function navigateToCategory() {
+  this.$router.push(`/category/${this.category.id}`);
+}
+
+const getResults = async (page = 1) => {
+  const response = await axiosClient.get("/categories");
+  categories.value = response.data;
+  console.log(categories);
+}
+
+getResults();
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -168,7 +187,7 @@ const sortOptions = [
   { name: 'Newest', href: '#', current: false },
   { name: 'Price: Low to High', href: '#', current: false },
   { name: 'Price: High to Low', href: '#', current: false },
-]
+];
 // const categories = [
 //   { name: 'Totes', href: '#' },
 //   { name: 'Backpacks', href: '#' },
@@ -176,6 +195,8 @@ const sortOptions = [
 //   { name: 'Hip Bags', href: '#' },
 //   { name: 'Laptop Sleeves', href: '#' },
 // ]
+
+
 const filters = [
   {
     id: 'category',

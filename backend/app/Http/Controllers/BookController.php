@@ -10,11 +10,20 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $books = Book::all();
+        $books = Book::paginate(15);
 
-        return response()->json($books);
+        // $category_id = $request->get('category_id');
+
+        // if (empty($category_id)) {
+        //     $posts = Book::all();
+        // } else {
+        //     $posts = Book::where('category_id', '=', $category_id)->get();
+        // }
+    
+
+        return $books;
     }
 
     /**

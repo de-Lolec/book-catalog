@@ -22,11 +22,13 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::get('/user', function (Request $request) {
       return $request->user();
   });
-  Route::get('/books', [BookController::class, 'index']);
+
   Route::get('/categories', [CategoryController::class, 'index']);
 
   Route::post('/logout', [AuthController::class, 'logout']);
 });
+
+Route::get('/books', [BookController::class, 'index']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

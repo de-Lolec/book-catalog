@@ -32,7 +32,7 @@ const routes = [
     component: Catalog
   },
   {
-    path: '/category',
+    path: '/catalog/:categoryId',
     name: 'Category',
     component: Catalog
   },
