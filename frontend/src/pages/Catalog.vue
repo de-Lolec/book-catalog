@@ -56,7 +56,7 @@
 
       <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-          <h1 class="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+          <h1 class="text-4xl font-bold tracking-tight text-gray-900">{{ findTitleById( $route.params.category_id) }}</h1>
 
           <div class="flex items-center">
             <Menu as="div" class="relative inline-block text-left">
@@ -173,13 +173,17 @@ watchEffect(() => {
 
 const categories = ref([]);
 
-const getResults = async (page = 1) => {
+const getCategories = async() => {
   const response = await axiosClient.get("/categories");
   categories.value = response.data;
-  console.log(categories);
 }
 
-getResults();
+getCategories();
+
+const findTitleById = (id) => {
+  const category = categories.value.find(category => category.id == id);
+  return category ? category.title : 'Категория не найдена';
+};
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
