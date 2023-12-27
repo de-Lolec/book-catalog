@@ -31,6 +31,11 @@ const routes = [
     name: 'Catalog',
     component: Catalog
   },
+  {
+    path: '/category',
+    name: 'Category',
+    component: Catalog
+  },
 ];
 
 const router = createRouter({

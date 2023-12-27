@@ -23,12 +23,12 @@
                 <form class="mt-4 border-t border-gray-200">
                   <h3 class="sr-only">Categories</h3>
                   <ul role="list" class="px-2 py-3 font-medium text-gray-900">
-                    <li v-for="category in subCategories" :key="category.name">
-                      <a :href="category.href" class="block px-2 py-3">{{ category.name }}</a>
+                    <li v-for="category in categories" :key="category.title">
+                      <a :href="category.href" class="block px-2 py-3">{{ category.title }}</a>
                     </li>
                   </ul>
 
-                  <Disclosure as="div" v-for="section in filters" :key="section.id" class="border-t border-gray-200 px-4 py-6" v-slot="{ open }">
+                  <Disclosure as="div" v-for="section in filters" :key="section.id" class="border-t border-gray-200 px-4 py-6" v-slot="{ open }" :defaultOpen="true">
                     <h3 class="-mx-2 -my-3 flow-root">
                       <DisclosureButton class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
                         <span class="font-medium text-gray-900">{{ section.name }}</span>
@@ -96,7 +96,11 @@
             <!-- Filters -->
             <form class="hidden lg:block">
               <h3 class="sr-only">Categories</h3>
-              
+              <ul role="list" class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
+                <li v-for="category in categories" :key="category.title">
+                  <span @click="navigateToCategory" class="cursor-pointer">{{ category.title }}</span>
+                </li>
+              </ul>
 
               <Disclosure as="div" v-for="section in filters" :key="section.id" class="border-b border-gray-200 py-6" v-slot="{ open }">
                 <h3 class="-my-3 flow-root">
@@ -131,7 +135,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import {
   Dialog,
   DialogPanel,
@@ -150,7 +154,13 @@ import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from
 import ProductList from './ProductList.vue';
 import axiosClient from '../axios';
 
+const categories = ref([]);
 
+onMounted(async () => {
+    const response = await axiosClient.get("/categories");
+    categories.value = response.data;
+    console.log(categories);
+});
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -159,13 +169,13 @@ const sortOptions = [
   { name: 'Price: Low to High', href: '#', current: false },
   { name: 'Price: High to Low', href: '#', current: false },
 ]
-const subCategories = [
-  { name: 'Totes', href: '#' },
-  { name: 'Backpacks', href: '#' },
-  { name: 'Travel Bags', href: '#' },
-  { name: 'Hip Bags', href: '#' },
-  { name: 'Laptop Sleeves', href: '#' },
-]
+// const categories = [
+//   { name: 'Totes', href: '#' },
+//   { name: 'Backpacks', href: '#' },
+//   { name: 'Travel Bags', href: '#' },
+//   { name: 'Hip Bags', href: '#' },
+//   { name: 'Laptop Sleeves', href: '#' },
+// ]
 const filters = [
   {
     id: 'category',
