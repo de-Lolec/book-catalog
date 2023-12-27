@@ -22,7 +22,9 @@
                 <!-- Filters -->
                 <form class="mt-4 border-t border-gray-200">
                   <h3 class="sr-only">Categories</h3>
+              
                   <ul role="list" class="px-2 py-3 font-medium text-gray-900">
+              
                     <li v-for="category in categories" :key="category.title">
                       <a :href="category.href" class="block px-2 py-3">{{ category.title }}</a>
                     </li>
@@ -91,12 +93,13 @@
 
         <section aria-labelledby="products-heading" class="pb-24 pt-6">
           <h2 id="products-heading" class="sr-only">Products</h2>
-
           <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
             <!-- Filters -->
             <form class="hidden lg:block">
               <h3 class="sr-only">Categories</h3>
+
               <ul role="list" class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
+                <CategoryForm v-if="user.is_admin"/>
                 <li v-for="category in categories" :key="category.title">
                   <router-link :to="`/catalog/category/${category.id}`">{{ category.title }}</router-link>
                 </li>
@@ -135,9 +138,11 @@
 
         </section>
 
+        
       </main>
     </div>
   </div>
+
 </template>
 
 <script setup>
@@ -158,12 +163,15 @@ import {
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/vue/20/solid';
 import { useRoute } from 'vue-router';
+import { useStore } from "vuex";
 import { TailwindPagination } from 'laravel-vue-pagination';
 import ProductList from './ProductList.vue';
 import axiosClient from '../axios';
-import { watchEffect } from 'vue';
+import { watchEffect, computed } from 'vue';
+import CategoryForm from '../components/CategoryForm.vue';
 
 const route = useRoute();
+const store = useStore();
 
 console.log(route.params);
 
@@ -184,6 +192,12 @@ const findTitleById = (id) => {
   const category = categories.value.find(category => category.id == id);
   return category ? category.title : 'Каталог';
 };
+
+store.dispatch("getUser");
+
+const user = computed(() => store.state.user.data);
+
+console.log(user);
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },

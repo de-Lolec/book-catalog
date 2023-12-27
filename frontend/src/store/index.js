@@ -33,6 +33,12 @@ const store = createStore({
             return response;
           })
       },
+      getUser({commit}) {
+        return axiosClient.get('/user')
+        .then(res => {
+          commit('setUser', res.data)
+        })
+      },
   },
   mutations: {
     logout: (state) => {
