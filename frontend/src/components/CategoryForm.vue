@@ -3,7 +3,8 @@
     class="cursor-pointer mb-2" 
     @click="openModal"
   >
-  Добавить категорию</h4>
+  Добавить категорию
+  </h4>
   <TransitionRoot appear :show="isOpen" as="template">
     <Dialog as="div" @close="closeModal" class="relative z-10">
       <TransitionChild
@@ -74,7 +75,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, defineProps, defineEmits } from 'vue'
 import {
   TransitionRoot,
   TransitionChild,
@@ -82,26 +83,30 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/vue'
+import axiosClient from '../axios';
 
 const title = ref('');
 const description = ref('');
-const isOpen = ref(false)
+const isOpen = ref(false);
+const props = defineProps(['loadCategories']);
+const emit = defineEmits();
 
 function closeModal() {
   isOpen.value = false
-}
+};
 function openModal() {
   isOpen.value = true
-}
+};
 
 const addCategory = async () => {
-  axios.post('/add-category', {
+  axiosClient.post('/category/create', {
       title: title.value,
       description: description.value,
     })
     .then(response => {
-      books.value = response.data;
-      console.log(books.value);
+      console.log(response);
+      closeModal()
+      emit('categoryAdded');
     }, error => {
       console.error('Error adding category:', error.message);
     });

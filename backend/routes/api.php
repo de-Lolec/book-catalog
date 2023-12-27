@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::post('/logout', [AuthController::class, 'logout']);
 });
 
+Route::post('/category/create', [CategoryController::class, 'store']);
 Route::get('/books', [BookController::class, 'index']);
 
 Route::post('/register', [AuthController::class, 'register']);

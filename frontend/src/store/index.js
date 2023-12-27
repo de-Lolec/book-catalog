@@ -39,6 +39,12 @@ const store = createStore({
           commit('setUser', res.data)
         })
       },
+      getCategories({ commit }) {
+        return axiosClient.get('/categories').then((res) => {
+          commit("setCategories", res.data);
+          return res;
+        });
+      },
   },
   mutations: {
     logout: (state) => {

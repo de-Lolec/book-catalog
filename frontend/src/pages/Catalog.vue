@@ -99,7 +99,10 @@
               <h3 class="sr-only">Categories</h3>
 
               <ul role="list" class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
-                <CategoryForm v-if="user.is_admin"/>
+                <CategoryForm 
+                  v-if="user.is_admin"
+                  @categoryAdded="getCategories" 
+                />
                 <li v-for="category in categories" :key="category.title">
                   <router-link :to="`/catalog/category/${category.id}`">{{ category.title }}</router-link>
                 </li>
