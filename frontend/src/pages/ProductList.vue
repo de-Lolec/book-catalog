@@ -4,12 +4,15 @@
       <h2 class="sr-only">Products</h2>
 
       <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-8">
-        <a v-for="book in books.data" :key="book.id" :href="book.href" class="group">
+        <a v-for="book in books.data" :key="book.id" :href="book.href" class="group cursor-pointer">
+        <router-link :to="`/catalog/book/${book.id}`" class="group cursor-pointer">
           <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
             <img :src="book.image" :alt="book.image" class="h-full w-full object-cover object-center group-hover:opacity-75" />
           </div>
           <h3 class="mt-4 text-m text-gray-700">{{ book.name }}</h3>
           <h4 class="mt-4 text-sm text-gray-700">{{ book.author.name }}</h4>
+        </router-link>
+        
           <BookForm
           :edit="true"
           :id="book.id"
@@ -62,7 +65,6 @@ const getBooks = async (page = 1) => {
               },
             });
   books.value = response.data;
-  console.log(books);
 };
 
 const deleteBook = async (id) => {

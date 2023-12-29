@@ -63,13 +63,13 @@
                   type="checkbox" 
                   v-model="selectedCategories" 
                   :value="category.id" 
-                  class="mb-1 bg-blue-100 border-blue-300 focus:ring-blue-200"/>
+                  class="mb-1 border-blue-300 focus:ring-blue-200"/>
                   {{ category.title }}
                 </label>
               </div>
               <div>
                 <label class="block text-sm font-medium leading-6 text-gray-900 mt-2">Выберите автора:</label>
-                  <select v-model="selectAuthor" class="mt-4 bg-blue-100 border-blue-300 focus:ring-blue-200" >
+                  <select v-model="selectAuthor" class="mt-4 border-blue-300 focus:ring-blue-200" >
                   <option disabled selected hidden value="">Выберите из списка</option>
                   <option
                     v-for="author in authors"

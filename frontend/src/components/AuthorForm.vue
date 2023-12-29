@@ -57,7 +57,7 @@
                   class="h-24 block w-full rounded-md border-0 py-1.5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
                 </div>
                   <label class="block text-sm font-medium leading-6 text-gray-900 mt-2">Страна:</label>
-                  <select v-model="selectCountry" class="mt-4 bg-blue-100 border-blue-300 focus:ring-blue-200" >
+                  <select v-model="selectCountry" class="mt-4 border-blue-300 focus:ring-blue-200" >
                     <option disabled selected hidden value="">Выберите из списка</option>
                     <option
                       v-for="country in countries"
@@ -93,7 +93,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue'
+import { ref, defineEmits } from 'vue'
 import {
   TransitionRoot,
   TransitionChild,

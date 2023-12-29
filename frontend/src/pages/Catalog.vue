@@ -117,17 +117,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import {
   Dialog,
   DialogPanel,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue';
@@ -158,8 +151,6 @@ const findTitleById = (id) => {
   const category = categories.value.find(category => category.id == id);
   return category ? category.title : 'Каталог';
 };
-
-store.dispatch("getUser");
 
 const user = computed(() => store.state.user.data);
 

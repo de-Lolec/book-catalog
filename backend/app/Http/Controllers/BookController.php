@@ -15,14 +15,19 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $categoryId = $request->get('category_id');
+        if($categoryId) {
+          $books = Book::whereHas('categories', function ($query) use ($categoryId) {
+              $query->where('categories.id', $categoryId);
+          })
+          ->with('author')
+          ->with('categories')
+          ->paginate(10);
+        } else {
+          $books = Book::with('author')
+          ->with('categories')
+          ->paginate(5);
+        }
 
-        $books = Book::whereHas('categories', function ($query) use ($categoryId) {
-            $query->where('categories.id', $categoryId);
-        })
-        ->with('author')
-        ->with('categories')
-        ->paginate(10);
-    
         return $books;
     }
 

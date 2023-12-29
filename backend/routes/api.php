@@ -24,25 +24,33 @@ Route::middleware('auth:sanctum')->group(function () {
       return $request->user();
   });
 
-  Route::get('/categories', [CategoryController::class, 'index']);
+  Route::prefix('category')->group(function () {
+    Route::post('/create', [CategoryController::class, 'store']);
+    Route::post('/{id}/edit', [CategoryController::class, 'update']);
+    Route::post('/{id}/delete', [CategoryController::class, 'destroy']);
+  });
+
+  Route::prefix('book')->group(function () {
+      Route::post('/create', [BookController::class, 'store']);
+      Route::post('/{id}/edit', [BookController::class, 'update']);
+      Route::post('/{id}/delete', [BookController::class, 'destroy']);
+  });
+
+  Route::prefix('authors')->group(function () {
+      Route::post('/create', [AuthorController::class, 'store']);
+      Route::post('/{id}/edit', [AuthorController::class, 'update']);
+      Route::post('/{id}/delete', [AuthorController::class, 'destroy']);
+  });
 
   Route::post('/logout', [AuthController::class, 'logout']);
 });
 
-Route::post('/category/create', [CategoryController::class, 'store']);
-Route::post('/category/{id}/edit', [CategoryController::class, 'update']);
-Route::post('/category/{id}/delete', [CategoryController::class, 'destroy']);
+Route::get('/categories', [CategoryController::class, 'index']);
 
 Route::get('/books', [BookController::class, 'index']);
 Route::get('/book/{id}', [BookController::class, 'show']);
-Route::post('/book/create', [BookController::class, 'store']);
-Route::post('/book/{id}/edit', [BookController::class, 'update']);
-Route::post('/book/{id}/delete', [BookController::class, 'destroy']);
 
 Route::get('/authors', [AuthorController::class, 'index']);
-Route::post('/author/create', [AuthorController::class, 'store']);
-Route::post('/author/{id}/edit', [AuthorController::class, 'update']);
-Route::post('/author/{id}/edit', [AuthorController::class, 'destroy']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
