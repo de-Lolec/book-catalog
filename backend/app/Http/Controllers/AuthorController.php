@@ -19,35 +19,13 @@ class AuthorController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
-    }
+        Author::create($request->all());
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return response()->json(['message' => 'Автор успешно сохранен'], 200);
     }
 
     /**
@@ -55,7 +33,11 @@ class AuthorController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $author = Author::find($id);
+
+        $author->update($request->all());
+
+        return response()->json(['message' => 'Автор успешно обновлен', 'data' => $author], 200);
     }
 
     /**
@@ -63,6 +45,8 @@ class AuthorController extends Controller
      */
     public function destroy(string $id)
     {
+        Author::destroy($id);
 
+        return response()->json(['message' => 'Автор успешно удален'], 200);
     }
 }

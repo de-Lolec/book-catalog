@@ -43,9 +43,9 @@
           >
             <h4 v-if="user.is_admin" class="ml-10 cursor-pointer">Добавить книгу</h4>
           </BookForm>
-          <BookForm>
+          <AuthorForm>
             <h4 v-if="user.is_admin" class="ml-10 cursor-pointer">Добавить автора</h4>
-          </BookForm>
+          </AuthorForm>
           <div class="flex items-center">
             <button type="button" class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden" @click="mobileFiltersOpen = true">
               <span class="sr-only">Filters</span>
@@ -141,6 +141,7 @@ import axiosClient from '../axios';
 import { watchEffect, computed } from 'vue';
 import CategoryForm from '../components/CategoryForm.vue';
 import BookForm from '../components/BookForm.vue';
+import AuthorForm from '../components/AuthorForm.vue';
 
 const route = useRoute();
 const store = useStore();

@@ -135,7 +135,6 @@ import {
   DialogTitle,
 } from '@headlessui/vue'
 import axiosClient from '../axios';
-import SelectCategories from './SelectCategories.vue';
 
 const { editName, editDescription, editYear, editImage, editSelectAuthor, id, edit, categories } = 
 defineProps(['editName', 'editDescription', 'editYear', 'editImage', 'editSelectedCategories', 'editSelectAuthor', 'id', 'edit', 'categories']);

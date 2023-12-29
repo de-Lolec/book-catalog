@@ -39,6 +39,9 @@ Route::post('/book/{id}/edit', [BookController::class, 'update']);
 Route::post('/book/{id}/delete', [BookController::class, 'destroy']);
 
 Route::get('/authors', [AuthorController::class, 'index']);
+Route::post('/author/create', [AuthorController::class, 'store']);
+Route::post('/author/{id}/edit', [AuthorController::class, 'update']);
+Route::post('/author/{id}/edit', [AuthorController::class, 'destroy']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
