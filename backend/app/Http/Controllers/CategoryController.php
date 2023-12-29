@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use App\Http\Requests\CategoryStoreRequest;
 
 class CategoryController extends Controller
 {
@@ -19,50 +19,30 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(CategoryStoreRequest $request)
+    public function store(CategoryRequest $request)
     {
-      $product = new Category([
-        'title' => $request['title'],
-        'description' => $request['description'],
-      ]);
+        $category = new Category([
+            'title' => $request['title'],
+            'description' => $request['description'],
+        ]);
 
-      $product->save();
+        $category->save();
 
-      return response()->json(['message' => 'Категория успешно сохранена'], 200);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return response()->json(['message' => 'Категория успешно сохранена'], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(CategoryRequest $request, string $id)
+    { 
+        $category = Category::find($id);
+
+        $category->update($request->all());
+
+        return response()->json(['message' => 'Категория успешно обновлена', 'data' => $category], 200);
     }
 
     /**

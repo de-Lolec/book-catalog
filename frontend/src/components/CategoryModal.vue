@@ -1,7 +1,4 @@
 <template>
-  <div class="inline" @click="openModal">
-    <slot></slot>
-  </div>
   <TransitionRoot appear :show="isOpen" as="template">
     <Dialog as="div" @close="closeModal" class="relative z-10">
       <TransitionChild
@@ -40,28 +37,18 @@
               </DialogTitle>
               <label for="title" class="block text-sm font-medium leading-6 text-gray-900 ">Название:</label>
                 <div class="relative mt-2 rounded-md shadow-sm">
-                  <input 
-                  v-model="title" 
-                  type="text" 
-                  name="price" 
-                  id="price" 
-                  class="block w-full rounded-md border-0 py-1.5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                  <input v-model="title" type="text" name="price" id="price" class="block w-full rounded-md border-0 py-1.5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
                 </div>
               <label for="description" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Описание:</label>
                 <div class="relative mt-2 rounded-md shadow-sm">
-                  <input 
-                  v-model="description" 
-                  type="text" 
-                  name="price" 
-                  id="price" 
-                  class="block w-full rounded-md border-0 py-1.5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                  <input v-model="description" type="text" name="price" id="price" class="block w-full rounded-md border-0 py-1.5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
                 </div>
 
               <div class="mt-4">
                 <button
                   type="button"
                   class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                  @click="saveCategory"
+                  @click="addCategory"
                 >
                   Добавить
                 </button>
@@ -84,19 +71,15 @@
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue'
 import {
-  TransitionRoot,
-  TransitionChild,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
+TransitionRoot,
+TransitionChild,
+Dialog,
+DialogPanel,
+DialogTitle,
 } from '@headlessui/vue'
-import axiosClient from '../axios';
 
-const { editTitle, editDescription, id, edit } = defineProps(['editTitle', 'editDescription', 'type', 'id', 'edit']);
-console.log(editTitle);
-const title = ref(editTitle || '');
-const description = ref(editDescription || '');
 const isOpen = ref(false);
+const props = defineProps(['loadCategories']);
 const emit = defineEmits();
 
 function closeModal() {
@@ -104,33 +87,5 @@ function closeModal() {
 };
 function openModal() {
   isOpen.value = true
-};
-
-const saveCategory = async () => {
-  if(edit){
-    axiosClient.post(`/category/${id}/edit`, {
-        title: title.value,
-        description: description.value,
-      })
-      .then(response => {
-        console.log(response);
-        closeModal()
-        emit('categoryUpdate');
-      }, error => {
-        console.error('Error adding category:', error.message);
-      });
-  } else {
-    axiosClient.post('/category/create', {
-        title: title.value,
-        description: description.value,
-      })
-      .then(response => {
-        console.log(response);
-        closeModal()
-        emit('categoryUpdate');
-      }, error => {
-        console.error('Error adding category:', error.message);
-      });
-  }
 };
 </script>

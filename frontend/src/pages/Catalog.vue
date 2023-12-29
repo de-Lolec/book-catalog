@@ -101,13 +101,27 @@
               <ul role="list" class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
                 <CategoryForm 
                   v-if="user.is_admin"
-                  @categoryAdded="getCategories" 
-                />
+                  @categoryUpdate="getCategories" 
+                >
+                  <h4 class="cursor-pointer mb-2">
+                    Добавить категорию
+                  </h4>
+                </CategoryForm>
                 <li v-for="category in categories" :key="category.title">
+                  <CategoryForm 
+                    v-if="user.is_admin"
+                    :edit="true"
+                    :id="category.id"
+                    :editTitle="category.title"
+                    :editDescription="category.description"
+                    @categoryUpdate="getCategories" 
+                  >
                   <PencilIcon 
                     v-if="user.is_admin" 
                     class="h4 w-4 inline cursor-pointer mr-2"
                   />
+                  </CategoryForm>
+                  
                   <TrashIcon 
                     v-if="user.is_admin" 
                     class="h4 w-4 inline cursor-pointer mr-2"
@@ -116,10 +130,7 @@
                   <router-link 
                     :to="`/catalog/category/${category.id}`">
                     {{ category.title }}
-                  
                   </router-link>
-                  <!-- <span>x</span> -->
-                
                 </li>
               </ul>
 
