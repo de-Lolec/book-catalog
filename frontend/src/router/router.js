@@ -2,8 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Login from "../pages/Login.vue";
 import Register from "../pages/Register.vue";
 import Catalog from "../pages/Catalog.vue";
-import Dashboard from "../pages/Dashboard.vue";
-import DefaultLayout from "../components/DefaultLayout.vue";
+import BookPage from "../pages/BookPage.vue";
 import store from "../store";
 
 const routes = [
@@ -32,6 +31,11 @@ const routes = [
     path: '/catalog/category/:category_id',
     name: 'Category',
     component: Catalog
+  },
+  {
+    path: '/catalog/book/:book_id',
+    name: 'BookPage',
+    component: BookPage
   },
 ];
 

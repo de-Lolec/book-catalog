@@ -57,15 +57,10 @@ class BookController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
+        $book = Book::with('categories', 'author')
+        ->find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return response()->json($book);
     }
 
     /**

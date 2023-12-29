@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
 import { useRoute } from 'vue-router';
 import { useStore } from "vuex";

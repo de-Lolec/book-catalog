@@ -132,25 +132,18 @@ import {
   TransitionRoot,
 } from '@headlessui/vue';
 import { XMarkIcon, TrashIcon, PencilIcon } from '@heroicons/vue/24/outline';
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/vue/20/solid';
 import { useRoute } from 'vue-router';
 import { useStore } from "vuex";
 import { TailwindPagination } from 'laravel-vue-pagination';
 import ProductList from './ProductList.vue';
 import axiosClient from '../axios';
-import { watchEffect, computed } from 'vue';
+import { computed } from 'vue';
 import CategoryForm from '../components/CategoryForm.vue';
 import BookForm from '../components/BookForm.vue';
 import AuthorForm from '../components/AuthorForm.vue';
 
 const route = useRoute();
 const store = useStore();
-
-console.log(route.params);
-
-watchEffect(() => {
-  console.log(route.params);
-});
 
 const categories = ref([]);
 
@@ -170,8 +163,6 @@ store.dispatch("getUser");
 
 const user = computed(() => store.state.user.data);
 
-console.log(user);
-
 const deleteCategory = async (id) => {
   axiosClient.post(`/category/${id}/delete`, {
       id: id,
@@ -182,50 +173,6 @@ const deleteCategory = async (id) => {
       console.error('Error delete category:', error.message);
     });
 };
-
-const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false },
-];
-// const categories = [
-//   { name: 'Totes', href: '#' },
-//   { name: 'Backpacks', href: '#' },
-//   { name: 'Travel Bags', href: '#' },
-//   { name: 'Hip Bags', href: '#' },
-//   { name: 'Laptop Sleeves', href: '#' },
-// ]
-
-
-const filters = [
-  {
-    id: 'category',
-    name: 'Категории',
-    options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
-    ],
-  },
-  {
-    id: 'size',
-    name: 'Авторы',
-    options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
-    ],
-  },
-]
-
-
 
 const mobileFiltersOpen = ref(false)
 </script>

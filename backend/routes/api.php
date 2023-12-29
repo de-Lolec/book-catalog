@@ -34,6 +34,7 @@ Route::post('/category/{id}/edit', [CategoryController::class, 'update']);
 Route::post('/category/{id}/delete', [CategoryController::class, 'destroy']);
 
 Route::get('/books', [BookController::class, 'index']);
+Route::get('/book/{id}', [BookController::class, 'show']);
 Route::post('/book/create', [BookController::class, 'store']);
 Route::post('/book/{id}/edit', [BookController::class, 'update']);
 Route::post('/book/{id}/delete', [BookController::class, 'destroy']);
