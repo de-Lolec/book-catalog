@@ -23,7 +23,7 @@ class BookFactory extends Factory
           'year' => fake()->year(),
           'description' => fake()->text(),
           'image' => url('images/' . basename(Arr::random(glob(public_path('images').'/*')))),
-          'author_id' => \App\Models\Author::factory(),
+          'author_id' => \App\Models\Author::all()->random()->id,
         ];
     }
 }

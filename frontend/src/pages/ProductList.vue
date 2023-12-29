@@ -10,6 +10,20 @@
           </div>
           <h3 class="mt-4 text-m text-gray-700">{{ book.name }}</h3>
           <h4 class="mt-4 text-sm text-gray-700">{{ book.author.name }}</h4>
+          <BookForm
+          :edit="true"
+          :id="book.id"
+          :editName="book.name"
+          :editDescription="book.description"
+          :editYear="book.year"
+          :editImage="book.image"
+          :editSelectAuthor="book.author"
+          :categories="categories"
+          v-if="user.is_admin"
+          >
+          <p class="cursor-pointer">Изменить</p>
+          </BookForm>
+          <p @click="deleteBook(book.id)" class="cursor-pointer" v-if="user.is_admin">Удалить</p>
         </a>
       </div>
     </div>
@@ -17,7 +31,7 @@
       <TailwindPagination
         class="mt-12 col-span-3"
         :data="books"
-        @pagination-change-page="getResults"
+        @pagination-change-page="getBooks"
       />
     </div>
   </div>
@@ -25,16 +39,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
 import { useRoute } from 'vue-router';
+import { useStore } from "vuex";
 import { watchEffect } from 'vue';
+import BookForm from '../components/BookForm.vue';
 import axiosClient from '../axios';
+const { categories } = defineProps(['categories']);
 
+const store = useStore();
 const route = useRoute();
 const books = ref([]);
 
-const getResults = async (page = 1) => {
+const user = computed(() => store.state.user.data);
+
+const getBooks = async (page = 1) => {
   const response = await axiosClient.get('/books', {
                 params: {
                   page: page,
@@ -45,8 +65,19 @@ const getResults = async (page = 1) => {
   console.log(books);
 };
 
+const deleteBook = async (id) => {
+  axiosClient.post(`/book/${id}/delete`, {
+      id: id,
+    })
+    .then(response => {
+      getBooks()
+    }, error => {
+      console.error('Error delete book:', error.message);
+    });
+};
+
 watchEffect(() => {
-  getResults();
+  getBooks();
 });
 
 </script>

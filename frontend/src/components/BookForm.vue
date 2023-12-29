@@ -59,7 +59,11 @@
               <label for="categories" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Категории:</label>
               <div v-for="category in categories">
                 <label>
-                  <input type="checkbox" v-model="selectedCategories" :value="category.id" class="mb-1 bg-blue-100 border-blue-300 focus:ring-blue-200"/>
+                  <input 
+                  type="checkbox" 
+                  v-model="selectedCategories" 
+                  :value="category.id" 
+                  class="mb-1 bg-blue-100 border-blue-300 focus:ring-blue-200"/>
                   {{ category.title }}
                 </label>
               </div>
@@ -133,19 +137,19 @@ import {
 import axiosClient from '../axios';
 import SelectCategories from './SelectCategories.vue';
 
-const { editTitle, editDescription, id, edit, categories } = defineProps(['editTitle', 'editDescription', 'id', 'edit', 'categories']);
+const { editName, editDescription, editYear, editImage, editSelectAuthor, id, edit, categories } = 
+defineProps(['editName', 'editDescription', 'editYear', 'editImage', 'editSelectedCategories', 'editSelectAuthor', 'id', 'edit', 'categories']);
 
-const name = ref(editTitle || '');
+const name = ref(editName || '');
 const description = ref(editDescription || '');
 const isOpen = ref(false);
-const year = ref('');
+const year = ref(editYear || '');
 const image = ref(null);
 const authors = ref('');
 const selectedCategories = ref([]);
-const selectAuthor = ref([]);
+const selectAuthor = ref('');
+const emit = defineEmits();
 
-console.log(selectedCategories);
-console.log(description);
 const handleFileChange = (event) => {
   image.value = event.target.files[0];
 };
@@ -153,7 +157,6 @@ const handleFileChange = (event) => {
 const handleYear = () => {
   year.value = year.value.replace(/\D/g, '').substring(0, 4);
 };
-const emit = defineEmits();
 
 function closeModal() {
   isOpen.value = false
@@ -170,15 +173,14 @@ const getAuthors = async () => {
 getAuthors();
 
 const saveBook = async () => {
-  if (!image.value) {
+  if (!image.value && !edit) {
     console.error('Файл не выбран');
-    return;
-  }
 
-  const allowedFormats = ['image/jpeg', 'image/png'];
-  if (!allowedFormats.includes(image.value.type)) {
-    console.error('Неверный формат файла. Допустимые форматы: JPG, JPEG, PNG.');
-    return;
+    const allowedFormats = ['image/jpeg', 'image/png'];
+    if (!allowedFormats.includes(image.value.type)) {
+      console.error('Неверный формат файла. Допустимые форматы: JPG, JPEG, PNG.');
+      return;
+    }
   }
 
   const formData = new FormData();
@@ -186,20 +188,23 @@ const saveBook = async () => {
   formData.append('name', name.value);
   formData.append('description', description.value);
   formData.append('year', year.value);
-  formData.append('author_id', author.value);
+  formData.append('author_id', selectAuthor.value);
   formData.append('categories', selectedCategories.value);
 
-  try {
+  if(edit){
+    const response = axiosClient.post(`/book/${id}/edit`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  } else {
     const response = axiosClient.post('/book/create', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
-
-    console.log('Файл успешно загружен', response.data);
-    console.log(formData);
-  } catch (error) {
-    console.error('Ошибка загрузки файла', error);
   }
+  closeModal();
+
 };
 </script>

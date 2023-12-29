@@ -18,7 +18,10 @@ class BookController extends Controller
 
         $books = Book::whereHas('categories', function ($query) use ($categoryId) {
             $query->where('categories.id', $categoryId);
-        })->with('author')->paginate(10);
+        })
+        ->with('author')
+        ->with('categories')
+        ->paginate(10);
     
         return $books;
     }
@@ -28,14 +31,12 @@ class BookController extends Controller
      */
     public function store(Request $request, SaveImageAction $saveImageAction)
     {
-        $path = $saveImageAction($request);
-
         $book = Book::create([
             'name' => $request['name'],
             'description' => $request['description'],
             'year' => $request['year'],
             'author_id' => $request['author_id'],
-            'image' => $path,
+            'image' => $saveImageAction($request),
         ]);
 
         if($request['categories']){
@@ -70,9 +71,29 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id, SaveImageAction $saveImageAction)
     {
-        //
+        $book = Book::find($id);
+
+        $book->update([
+            'name' => $request['name'],
+            'description' => $request['description'],
+            'year' => $request['year'],
+            'author_id' => $request['author_id'],
+            'image' => $request->hasFile('image') ? $saveImageAction($request) : $book->image,
+        ]);
+
+        if($request['categories']){
+            $categories = explode(',', $request['categories']);
+            foreach($categories as $category_id){
+                BookCategory::updateOrCreate([
+                    'book_id' => $id,
+                    'category_id' => $category_id
+                ]);
+            }
+        }
+
+        return response()->json(['message' => "Книга успешно сохранена"], 200);
     }
 
     /**
@@ -80,6 +101,8 @@ class BookController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Book::destroy($id);
+
+        return response()->json(['message' => 'Книга успешно удалена'], 200);
     }
 }
