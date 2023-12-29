@@ -57,16 +57,13 @@
                   class="h-24 block w-full rounded-md border-0 py-1.5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
                 </div>
               <label for="categories" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Категории:</label>
-                <!-- <SelectCategories
-                :categories="categories"
-                v-model:selectedCategories="selectedCategories"
-                /> -->
               <div v-for="category in categories">
                 <label>
                   <input type="checkbox" v-model="selectedCategories" :value="category.id" class="mb-1 bg-blue-100 border-blue-300 focus:ring-blue-200"/>
                   {{ category.title }}
                 </label>
               </div>
+              
               <label for="year" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Год:</label>
                 <div class="relative mt-2 rounded-md shadow-sm">
                   <input 

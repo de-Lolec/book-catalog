@@ -22,7 +22,8 @@ class BookFactory extends Factory
           'name' => fake()->sentence(2),
           'year' => fake()->year(),
           'description' => fake()->text(),
-          'image' => Arr::random(Storage::files('/public/assets/cover_book')),
+          'image' => url('images/' . basename(Arr::random(glob(public_path('images').'/*')))),
+          'author_id' => \App\Models\Author::factory(),
         ];
     }
 }

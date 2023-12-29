@@ -18,7 +18,7 @@ class BookController extends Controller
 
         $books = Book::whereHas('categories', function ($query) use ($categoryId) {
             $query->where('categories.id', $categoryId);
-        })->paginate(10);
+        })->with('author')->paginate(10);
     
         return $books;
     }
