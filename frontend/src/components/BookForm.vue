@@ -73,7 +73,7 @@
                   <option disabled selected hidden value="">Выберите из списка</option>
                   <option
                     v-for="author in authors"
-                    :key="author.value"
+                    :key="author"
                     :value="author.id"
                   >
                     {{ author.name }}
@@ -174,7 +174,7 @@ getAuthors();
 const saveBook = async () => {
   if (!image.value && !edit) {
     console.error('Файл не выбран');
-
+    console.log(selectAuthor);
     const allowedFormats = ['image/jpeg', 'image/png'];
     if (!allowedFormats.includes(image.value.type)) {
       console.error('Неверный формат файла. Допустимые форматы: JPG, JPEG, PNG.');
