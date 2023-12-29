@@ -23,12 +23,7 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $category = new Category([
-            'title' => $request['title'],
-            'description' => $request['description'],
-        ]);
-
-        $category->save();
+        Category::create($request->all());
 
         return response()->json(['message' => 'Категория успешно сохранена'], 200);
     }

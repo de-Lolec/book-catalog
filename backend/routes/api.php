@@ -33,6 +33,7 @@ Route::post('/category/{id}/edit', [CategoryController::class, 'update']);
 Route::post('/category/{id}/delete', [CategoryController::class, 'destroy']);
 
 Route::get('/books', [BookController::class, 'index']);
+Route::post('/book/create', [BookController::class, 'store']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

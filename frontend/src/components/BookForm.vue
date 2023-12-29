@@ -34,17 +34,17 @@
             >
               <DialogTitle
                 as="h3"
-                class="text-lg font-medium leading-6 text-gray-900"
+                class="mb-2 text-lg font-medium leading-6 text-gray-900"
               >
-                Добавить категорию
+                Добавить книгу
               </DialogTitle>
               <label for="title" class="block text-sm font-medium leading-6 text-gray-900 ">Название:</label>
                 <div class="relative mt-2 rounded-md shadow-sm">
                   <input 
-                  v-model="title" 
+                  v-model="name" 
                   type="text" 
-                  name="price" 
-                  id="price" 
+                  name="name" 
+                  id="name" 
                   class="block w-full rounded-md border-0 py-1.5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
                 </div>
               <label for="description" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Описание:</label>
@@ -52,16 +52,46 @@
                   <input 
                   v-model="description" 
                   type="text" 
-                  name="price" 
-                  id="price" 
+                  name="description" 
+                  id="description" 
                   class="h-24 block w-full rounded-md border-0 py-1.5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
                 </div>
-
+              <label for="categories" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Категории:</label>
+                <!-- <SelectCategories
+                :categories="categories"
+                v-model:selectedCategories="selectedCategories"
+                /> -->
+              <div v-for="category in categories">
+                <label>
+                  <input type="checkbox" v-model="selectedCategories" :value="category.id" class="mb-1 bg-blue-100 border-blue-300 focus:ring-blue-200"/>
+                  {{ category.title }}
+                </label>
+              </div>
+              <label for="year" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Год:</label>
+                <div class="relative mt-2 rounded-md shadow-sm">
+                  <input 
+                  v-model="year" 
+                  @input="handleYear"
+                  type="text" 
+                  name="year" 
+                  id="year" 
+                  class="mb-4 block w-full rounded-md border-0 py-1.5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                </div>
+              <label for="year" class="block text-sm font-medium leading-6 text-gray-900 mt-2 mb-2">Добавить изображение:</label>
+                <input type="file" 
+                  class="block w-full text-sm text-slate-500
+                  file:mr-4 file:py-2 file:px-4
+                  file:rounded-full file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-violet-50 file:text-violet-700
+                  hover:file:bg-violet-100" 
+                  @change="handleFileChange" 
+                />
               <div class="mt-4">
                 <button
                   type="button"
                   class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                  @click="saveCategory"
+                  @click="saveBook"
                 >
                   Добавить
                 </button>
@@ -91,12 +121,26 @@ import {
   DialogTitle,
 } from '@headlessui/vue'
 import axiosClient from '../axios';
+import SelectCategories from './SelectCategories.vue';
 
-const { editTitle, editDescription, id, edit } = defineProps(['editTitle', 'editDescription', 'type', 'id', 'edit']);
+const { editTitle, editDescription, id, edit, categories } = defineProps(['editTitle', 'editDescription', 'id', 'edit', 'categories']);
 
-const title = ref(editTitle || '');
+const name = ref(editTitle || '');
 const description = ref(editDescription || '');
 const isOpen = ref(false);
+const year = ref('');
+const image = ref(null);
+const selectedCategories = ref([]);
+
+console.log(selectedCategories);
+console.log(description);
+const handleFileChange = (event) => {
+  image.value = event.target.files[0];
+};
+
+const handleYear = () => {
+  year.value = year.value.replace(/\D/g, '').substring(0, 4);
+};
 const emit = defineEmits();
 
 function closeModal() {
@@ -106,31 +150,36 @@ function openModal() {
   isOpen.value = true
 };
 
-const saveCategory = async () => {
-  if(edit){
-    axiosClient.post(`/category/${id}/edit`, {
-        title: title.value,
-        description: description.value,
-      })
-      .then(response => {
-        console.log(response);
-        closeModal()
-        emit('categoryUpdate');
-      }, error => {
-        console.error('Error adding category:', error.message);
-      });
-  } else {
-    axiosClient.post('/category/create', {
-        title: title.value,
-        description: description.value,
-      })
-      .then(response => {
-        console.log(response);
-        closeModal()
-        emit('categoryUpdate');
-      }, error => {
-        console.error('Error adding category:', error.message);
-      });
+const saveBook = async () => {
+  if (!image.value) {
+    console.error('Файл не выбран');
+    return;
+  }
+
+  const allowedFormats = ['image/jpeg', 'image/png'];
+  if (!allowedFormats.includes(image.value.type)) {
+    console.error('Неверный формат файла. Допустимые форматы: JPG, JPEG, PNG.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('image', image.value);
+  formData.append('name', name.value);
+  formData.append('description', description.value);
+  formData.append('year', year.value);
+  formData.append('categories', selectedCategories.value);
+
+  try {
+    const response = axiosClient.post('/book/create', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    console.log('Файл успешно загружен', response.data);
+    console.log(formData);
+  } catch (error) {
+    console.error('Ошибка загрузки файла', error);
   }
 };
 </script>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\BookCategory;
+use App\Actions\SaveImageAction;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -12,32 +14,40 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-        // $books = Book::paginate(15);
-
         $categoryId = $request->get('category_id');
 
         $books = Book::whereHas('categories', function ($query) use ($categoryId) {
             $query->where('categories.id', $categoryId);
         })->paginate(10);
     
-
         return $books;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, SaveImageAction $saveImageAction)
     {
-        //
+        $path = $saveImageAction($request);
+
+        $book = Book::create([
+            'name' => $request['name'],
+            'description' => $request['description'],
+            'year' => $request['year'],
+            'image' => $path,
+        ]);
+
+        if($request['categories']){
+            $categories = explode(',', $request['categories']);
+            foreach($categories as $category_id){
+                BookCategory::create([
+                    'book_id' => $book->id,
+                    'category_id' => $category_id
+                ]);
+            }
+        }
+
+        return response()->json(['message' => "Книга успешно сохранена"], 200);
     }
 
     /**
