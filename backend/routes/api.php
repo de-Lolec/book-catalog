@@ -1,11 +1,12 @@
 <?php
 
 
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\BookController;
-use App\Http\Controllers\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,8 @@ Route::post('/category/{id}/delete', [CategoryController::class, 'destroy']);
 
 Route::get('/books', [BookController::class, 'index']);
 Route::post('/book/create', [BookController::class, 'store']);
+
+Route::get('/authors', [AuthorController::class, 'index']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

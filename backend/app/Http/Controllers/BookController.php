@@ -34,6 +34,7 @@ class BookController extends Controller
             'name' => $request['name'],
             'description' => $request['description'],
             'year' => $request['year'],
+            'author_id' => $request['author_id'],
             'image' => $path,
         ]);
 

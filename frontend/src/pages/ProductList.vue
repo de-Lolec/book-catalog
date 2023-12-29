@@ -35,15 +35,15 @@ const route = useRoute();
 const books = ref([]);
 
 const getResults = async (page = 1) => {
-    const response = await axiosClient.get('/books', {
-                    params: {
-                        page: page,
-                        category_id: route.params.category_id,
-                    },
-                  });
-    books.value = response.data;
-    console.log(books);
-  };
+  const response = await axiosClient.get('/books', {
+                params: {
+                  page: page,
+                  category_id: route.params.category_id,
+              },
+            });
+  books.value = response.data;
+  console.log(books);
+};
 
 watchEffect(() => {
   getResults();

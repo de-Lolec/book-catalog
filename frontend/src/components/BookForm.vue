@@ -63,7 +63,20 @@
                   {{ category.title }}
                 </label>
               </div>
-              
+              <div>
+                <label class="block text-sm font-medium leading-6 text-gray-900 mt-2">Выберите автора:</label>
+                  <select v-model="selectAuthor" class="mt-4 bg-blue-100 border-blue-300 focus:ring-blue-200" >
+                  <option disabled selected hidden value="">Выберите из списка</option>
+                  <option
+                    v-for="author in authors"
+                    :key="author.value"
+                    :value="author.id"
+                  >
+                    {{ author.name }}
+                  </option>
+                  </select>
+              </div>
+
               <label for="year" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Год:</label>
                 <div class="relative mt-2 rounded-md shadow-sm">
                   <input 
@@ -127,7 +140,9 @@ const description = ref(editDescription || '');
 const isOpen = ref(false);
 const year = ref('');
 const image = ref(null);
+const authors = ref('');
 const selectedCategories = ref([]);
+const selectAuthor = ref([]);
 
 console.log(selectedCategories);
 console.log(description);
@@ -147,6 +162,13 @@ function openModal() {
   isOpen.value = true
 };
 
+const getAuthors = async () => {
+  const response = await axiosClient.get('/authors');
+  authors.value = response.data;
+};
+
+getAuthors();
+
 const saveBook = async () => {
   if (!image.value) {
     console.error('Файл не выбран');
@@ -164,6 +186,7 @@ const saveBook = async () => {
   formData.append('name', name.value);
   formData.append('description', description.value);
   formData.append('year', year.value);
+  formData.append('author_id', author.value);
   formData.append('categories', selectedCategories.value);
 
   try {
