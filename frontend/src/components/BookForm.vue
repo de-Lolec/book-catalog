@@ -49,7 +49,7 @@
                 </div>
               <label for="description" class="block text-sm font-medium leading-6 text-gray-900 mt-2">Описание:</label>
                 <div class="relative mt-2 rounded-md shadow-sm">
-                  <input 
+                  <textarea   
                   v-model="description" 
                   type="text" 
                   name="description" 
