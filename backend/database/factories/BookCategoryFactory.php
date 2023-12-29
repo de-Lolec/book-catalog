@@ -17,8 +17,8 @@ class BookCategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'book_id' => \App\Models\Book::factory(),
-            'category_id' => \App\Models\Category::factory(),
+            'book_id' => \App\Models\Book::all()->random()->id,
+            'category_id' => \App\Models\Category::all()->random()->id,
         ];
     }
 }

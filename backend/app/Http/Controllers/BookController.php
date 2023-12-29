@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\BookCategory;
+use App\Actions\SaveImageAction;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -12,32 +14,47 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-        // $books = Book::paginate(15);
-
         $categoryId = $request->get('category_id');
-
-        $books = Book::whereHas('categories', function ($query) use ($categoryId) {
-            $query->where('categories.id', $categoryId);
-        })->paginate(10);
-    
+        if($categoryId) {
+          $books = Book::whereHas('categories', function ($query) use ($categoryId) {
+              $query->where('categories.id', $categoryId);
+          })
+          ->with('author')
+          ->with('categories')
+          ->paginate(10);
+        } else {
+          $books = Book::with('author')
+          ->with('categories')
+          ->paginate(5);
+        }
 
         return $books;
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, SaveImageAction $saveImageAction)
     {
-        //
+        $book = Book::create([
+            'name' => $request['name'],
+            'description' => $request['description'],
+            'year' => $request['year'],
+            'author_id' => $request['author_id'],
+            'image' => $saveImageAction($request),
+        ]);
+
+        if($request['categories']){
+            $categories = explode(',', $request['categories']);
+            foreach($categories as $category_id){
+                BookCategory::create([
+                    'book_id' => $book->id,
+                    'category_id' => $category_id
+                ]);
+            }
+        }
+
+        return response()->json(['message' => "Книга успешно сохранена"], 200);
     }
 
     /**
@@ -45,23 +62,38 @@ class BookController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
+        $book = Book::with('categories', 'author')
+        ->find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return response()->json($book);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id, SaveImageAction $saveImageAction)
     {
-        //
+        $book = Book::find($id);
+
+        $book->update([
+            'name' => $request['name'],
+            'description' => $request['description'],
+            'year' => $request['year'],
+            'author_id' => $request['author_id'],
+            'image' => $request->hasFile('image') ? $saveImageAction($request) : $book->image,
+        ]);
+
+        if($request['categories']){
+            $categories = explode(',', $request['categories']);
+            foreach($categories as $category_id){
+                BookCategory::updateOrCreate([
+                    'book_id' => $id,
+                    'category_id' => $category_id
+                ]);
+            }
+        }
+
+        return response()->json(['message' => "Книга успешно сохранена"], 200);
     }
 
     /**
@@ -69,6 +101,8 @@ class BookController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Book::destroy($id);
+
+        return response()->json(['message' => 'Книга успешно удалена'], 200);
     }
 }

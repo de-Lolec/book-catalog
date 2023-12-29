@@ -18,21 +18,33 @@ const store = createStore({
             return data;
           })
       },
-      login({commit}, user) {
-        return axiosClient.post('/login', user)
-          .then(({data}) => {
-            commit('setUser', data.user);
-            commit('setToken', data.token)
-            return data;
-          })
-      },
-      logout({commit}) {
-        return axiosClient.post('/logout')
-          .then(response => {
-            commit('logout')
-            return response;
-          })
-      },
+    login({commit}, user) {
+      return axiosClient.post('/login', user)
+        .then(({data}) => {
+          commit('setUser', data.user);
+          commit('setToken', data.token)
+          return data;
+        })
+    },
+    logout({commit}) {
+      return axiosClient.post('/logout')
+        .then(response => {
+          commit('logout')
+          return response;
+        })
+    },
+    getUser({commit}) {
+      return axiosClient.get('/user')
+      .then(res => {
+        commit('setUser', res.data)
+      })
+    },
+    getCategories({ commit }) {
+      return axiosClient.get('/categories').then((res) => {
+        commit("setCategories", res.data);
+        return res;
+      });
+    },
   },
   mutations: {
     logout: (state) => {

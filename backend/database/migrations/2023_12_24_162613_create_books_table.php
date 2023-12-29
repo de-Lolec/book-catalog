@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('year');
             $table->text('description');
             $table->string('image');
+            $table->foreignIdFor(Author::class);
             $table->timestamps();
         });
     }
