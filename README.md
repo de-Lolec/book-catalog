@@ -28,7 +28,7 @@ cp env.example .env
 npm run dev
 ```
 
-Логин и пароль от аккаунта админа
-Логин: admin@admin.admin
+Логин и пароль от аккаунта админа <br>
+Логин: admin@admin.admin  <br>
 Пароль: password
 
