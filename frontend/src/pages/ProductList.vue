@@ -22,11 +22,11 @@
           :editImage="book.image"
           :editSelectAuthor="book.author"
           :categories="categories"
-          v-if="user.is_admin"
+          v-if="user && user.is_admin"
           >
           <p class="cursor-pointer">Изменить</p>
           </BookForm>
-          <p @click="deleteBook(book.id)" class="cursor-pointer" v-if="user.is_admin">Удалить</p>
+          <p @click="deleteBook(book.id)" class="cursor-pointer" v-if="user && user.is_admin">Удалить</p>
         </a>
       </div>
     </div>
