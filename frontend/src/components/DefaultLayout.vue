@@ -33,7 +33,7 @@
           <Menu as="div" class="relative ml-3">
             <span class="sr-only">Open user menu</span>
               <div v-if="user">
-                <h2 class="text-white inline" @click="logout">Выйти</h2>
+                <h2 class="text-white inline cursor-pointer" @click="logout">Выйти</h2>
               </div>
               <div v-else>
                 <router-link :to="`/login`" class="text-white inline mr-10 cursor-pointer" >Войти</router-link>

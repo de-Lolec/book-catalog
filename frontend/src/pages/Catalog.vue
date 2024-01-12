@@ -41,10 +41,10 @@
           <BookForm
           :categories="categories"
           >
-            <h4 v-if="user.is_admin" class="ml-10 cursor-pointer">Добавить книгу</h4>
+            <h4 v-if="user && user.is_admin" class="ml-10 cursor-pointer">Добавить книгу</h4>
           </BookForm>
           <AuthorForm>
-            <h4 v-if="user.is_admin" class="ml-10 cursor-pointer">Добавить автора</h4>
+            <h4 v-if="user && user.is_admin" class="ml-10 cursor-pointer">Добавить автора</h4>
           </AuthorForm>
           <div class="flex items-center">
             <button type="button" class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden" @click="mobileFiltersOpen = true">
@@ -63,7 +63,7 @@
 
               <ul role="list" class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
                 <CategoryForm 
-                  v-if="user.is_admin"
+                  v-if="user && user.is_admin"
                   @categoryUpdate="getCategories" 
                 >
                   <h4 class="cursor-pointer mb-2">
@@ -72,7 +72,7 @@
                 </CategoryForm>
                 <li v-for="category in categories" :key="category.title">
                   <CategoryForm 
-                    v-if="user.is_admin"
+                    v-if="user && user.is_admin"
                     :edit="true"
                     :id="category.id"
                     :editTitle="category.title"
@@ -80,13 +80,13 @@
                     @categoryUpdate="getCategories" 
                   >
                     <PencilIcon 
-                      v-if="user.is_admin" 
+                      v-if="user && user.is_admin" 
                       class="h4 w-4 inline cursor-pointer mr-2"
                     />
                   </CategoryForm>
                   
                   <TrashIcon 
-                    v-if="user.is_admin" 
+                    v-if="user && user.is_admin" 
                     class="h4 w-4 inline cursor-pointer mr-2"
                     @click="deleteCategory(category.id)"
                   />
@@ -145,6 +145,7 @@ const getCategories = async() => {
   categories.value = response.data;
 }
 
+
 getCategories();
 
 const findTitleById = (id) => {
@@ -153,6 +154,7 @@ const findTitleById = (id) => {
 };
 
 const user = computed(() => store.state.user.data);
+console.log(user);
 
 const deleteCategory = async (id) => {
   axiosClient.post(`/category/${id}/delete`, {
